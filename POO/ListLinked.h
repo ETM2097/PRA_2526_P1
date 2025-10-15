@@ -14,35 +14,107 @@ class ListLinked : public List<T> {
 	public:
 		ListLinked() : first(nullptr), n(0) {}
 		~ListLinked() {
-			Node<T>* newNode = new Node(NULL);
-			newNode = first;
-			while(newNode->next != nullptr){
-				Node<T>* todelete = new Node(NULL);
-				todelete = newNode;
-				newNode = newNode->next;
+			Node<T>* current = first;
+			while (current != nullptr) {
+				Node<T>* todelete = current;
+				current = current->next;
 				delete todelete;
 			}
-			delete newNode;
 		}
 
 		T operator[](int pos){
-			if (pos < 0 || pos > n) throw std::out_of_range("Out fo range");
-			Node<T>* newNode = new Node(NULL);
-			newNode = list.first;
-			for (int i = 1; i <= pos; ++i){
-				newNode = newNode->next;
+			if (pos < 0 || pos >= n) throw std::out_of_range("Out of range");
+			Node<T>* current = first;
+			for (int i = 0; i < pos; ++i){
+				current = current->next;
 			}
-			return newNode->data;
+			return current->data;
 		}
 
 		friend std::ostream& operator<<(std::ostream &out, const ListLinked<T> &list){
-			Node<T>* newNode = Node(NULL);
-			newNode = first;
-			while(newNode != nullptr){
-				out << newNode->data << " ";
+			Node<T>* current = list.first;
+			while(current != nullptr){
+				out << current->data << " ";
+				current = current->next;
 			}
 			out << "\n";
 			return out;
+		}
+
+		void insert(int pos, T e){
+			if (pos < 0 || pos > n) throw std::out_of_range("Out of range");
+			if (pos == 0){
+				first = new Node<T>(e, first);
+			}
+			else{
+				Node<T>* current = first;
+				for (int i = 0; i < pos - 1; ++i){
+					current = current->next;
+				}
+				current->next = new Node<T>(e, current->next);
+			}
+			n++;
+		}
+
+		void append(T e){
+			insert(n, e);
+		}
+
+		void prepend(T e){
+			insert(0, e);
+		}
+
+		T remove(int pos){
+			if (pos < 0 || pos >= n) throw std::out_of_range("Out of range");
+			Node<T>* todelete;
+			T data;
+			if (pos == 0){
+				todelete = first;
+				data = first->data;
+				first = first->next;
+			}
+			else{
+				Node<T>* current = first;
+				for (int i = 0; i < pos - 1; ++i){
+					current = current->next;
+				}
+				todelete = current->next;
+				data = todelete->data;
+				current->next = todelete->next;
+			}
+			delete todelete;
+			n--;
+			return data;
+		}
+
+		T get(int pos){
+			if (pos < 0 || pos >= n) throw std::out_of_range("Out of range");
+			Node<T>* current = first;
+			for (int i = 0; i < pos; ++i){
+				current = current->next;
+			}
+			return current->data;
+		}
+
+		int search(T e){
+			Node<T>* current = first;
+			int pos = 0;
+			while (current != nullptr){
+				if (current->data == e){
+					return pos;
+				}
+				current = current->next;
+				pos++;
+			}
+			return -1;
+		}
+
+		bool empty() const {
+			return n == 0;
+		}
+
+		int size() const {
+			return n;
 		}
 };
 
