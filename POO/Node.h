@@ -12,13 +12,11 @@ class Node {
 	}
 	
 	friend std::ostream& operator<<(std::ostream &out, const Node<T> &node){
-		Node* newNode = new Node(NULL);
-		newNode = node;
-		while(newNode->next != nullptr){
-			out << newNode->data << " ";
-			newNode = newNode->next;
+		while(node->next != nullptr){
+			out << node->data << " ";
+			node = node->next;
 		}
-		out << newNode <<"\n";
+		out << node <<"\n";
 		return out;
 	}
     

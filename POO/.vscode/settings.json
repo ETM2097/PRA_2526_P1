@@ -1,0 +1,6 @@
+{
+    "ros.distro": "jazzy",
+    "files.associations": {
+        "iosfwd": "cpp"
+    }
+}
